@@ -1,0 +1,7 @@
+# Add your own API keys here and rename this file to provider-config.yaml
+shodan:
+  - [YOUR_SHODAN_API_KEY]
+chaos:
+  - [YOUR_CHAOS_API_KEY]
+github:
+  - [YOUR_GITHUB_PERSONAL_ACCESS_TOKEN]
