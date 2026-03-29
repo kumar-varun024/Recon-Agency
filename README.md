@@ -22,33 +22,85 @@ This framework requires the following tools to be present in the system's PATH:
 
 ## Installation and Setup
 
-1. **Clone the Repository**
-   ```bash
-   git clone [https://github.com/YOUR_USERNAME/recon-api.git](https://github.com/YOUR_USERNAME/recon-api.git)
-   cd recon-api
-# Recon-Agency
-# Recon-Agency
+### 1. Clone the Repository
 
-Step 1: Start the Server
- Open your terminal and type the global command to wake up the API server:
- Bash
-  -agency
-(Note: Wait for the "Application startup complete" message. Let this run in the background. Do not close this terminal or 
-press Ctrl+C).
+```bash
+git clone https://github.com/YOUR_USERNAME/recon-api.git
+cd recon-api
+```
 
-Step 2: Launch the Scan
-  Press Ctrl + Shift + T to open a brand new terminal tab. Then, trigger your reconnaissance scan by typing the client command followed by your target domain:
+### 2. Install Dependencies
 
-  To run the Master Web Pipeline (Subfinder ➔ httpx):
+```bash
+chmod +x setup.sh
+./setup.sh
+```
 
-Bash
- -agency-scan example.com
+This will install all required Python packages listed in `requirements.txt`.
 
-To run the Network Port Scan (Nmap):
+### 3. Configure External API Keys (Optional)
 
-Bash
- -agency-scan ports hackerone.com
+Edit `api/provider-config.yaml` with your API keys for providers like Shodan, Censys, etc. (copy from `provider-config.yaml.example`).
 
-To run everything at once(might be slow)
-Bash
- -agency-scan nuke hackerone.com 
+## Quick Start
+
+### Starting the API Server
+
+```bash
+launch-agency.sh
+```
+
+Wait for the message "Application startup complete" before proceeding.
+
+### Running Reconnaissance Scans
+
+In a new terminal, use the scan launcher:
+
+**Web Reconnaissance (Subfinder → httpx):**
+```bash
+launch-scan.sh example.com
+```
+
+**Network Port Scan (Nmap):**
+```bash
+launch-scan.sh ports hackerone.com
+```
+
+**Full Reconnaissance (All Tools):**
+```bash
+launch-scan.sh nuke hackerone.com
+```
+
+## API Endpoints
+
+- `POST /nmap` - Network reconnaissance with Nmap
+- `POST /ffuf` - Web path discovery with FFUF
+- `POST /subfinder` - Subdomain enumeration
+- `POST /full-recon` - Complete web reconnaissance pipeline
+- `GET /health` - API health check
+
+## Project Structure
+
+```
+recon-api/
+├── api/                    # FastAPI routes and configurations
+├── core/                   # Core scanner implementations
+├── main.py                 # Entry point
+├── setup.sh               # Environment setup script
+├── launch-agency.sh       # API server launcher
+├── launch-scan.sh         # Scan client launcher
+├── requirements.txt       # Python dependencies
+└── README.md             # This file
+```
+
+## Contributing
+
+Contributions are welcome! Please ensure all code follows the project's style guidelines.
+
+## License
+
+This project is provided as-is for educational and authorized security testing purposes only.
+
+## Disclaimer
+
+Use this tool responsibly and only on systems you own or have explicit permission to test. Unauthorized access to computer systems is illegal.
