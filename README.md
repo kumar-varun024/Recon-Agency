@@ -28,3 +28,27 @@ This framework requires the following tools to be present in the system's PATH:
    cd recon-api
 # Recon-Agency
 # Recon-Agency
+
+Step 1: Start the Server
+ Open your terminal and type the global command to wake up the API server:
+ Bash
+  -agency
+(Note: Wait for the "Application startup complete" message. Let this run in the background. Do not close this terminal or 
+press Ctrl+C).
+
+Step 2: Launch the Scan
+  Press Ctrl + Shift + T to open a brand new terminal tab. Then, trigger your reconnaissance scan by typing the client command followed by your target domain:
+
+  To run the Master Web Pipeline (Subfinder ➔ httpx):
+
+Bash
+ -agency-scan example.com
+
+To run the Network Port Scan (Nmap):
+
+Bash
+ -agency-scan ports hackerone.com
+
+To run everything at once(might be slow)
+Bash
+ -agency-scan nuke hackerone.com 
