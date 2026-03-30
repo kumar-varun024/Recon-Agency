@@ -77,6 +77,12 @@ agency-scan example.com
 agency-scan ports example.com
 ```
 
+**Full Reconnaissance Pipeline (All Tools):**
+
+```bash
+agency-scan nuke hackerone.com
+```
+
 ## API Endpoints
 
 The API utilizes GET requests for simplified browser and client testing.
