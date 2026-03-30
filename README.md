@@ -42,7 +42,7 @@ chmod +x setup.sh
 ./setup.sh
 ```
 
-This will install all required Python packages listed in `requirements.txt`.
+
 
 ### 3. Configure Global Commands (Required)
 
