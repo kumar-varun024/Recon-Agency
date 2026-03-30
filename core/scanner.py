@@ -145,7 +145,17 @@ async def run_recon_pipeline(target: str):
     # 2. Prepare the data for httpx
     input_data = "\n".join(subdomains).encode()
     
-    command = ["httpx-toolkit", "-silent", "-title", "-tech-detect", "-status-code", "-json"]
+    # command = ["httpx-toolkit", "-silent", "-title", "-tech-detect", "-status-code", "-json"]
+    command = [
+    "httpx-toolkit", 
+    "-silent", 
+    "-title",
+    "-tech-detect", 
+    "-status-code", 
+    "-json", 
+    "-rl", "50",           # Rate limit to 50 requests per sec to stay under the radar
+    "-H", "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" # Disguise as Google Chrome
+]
     
     process = await asyncio.create_subprocess_exec(
         *command,
@@ -168,9 +178,9 @@ async def run_recon_pipeline(target: str):
                 data = json.loads(line)
                 alive_hosts.append({
                     "url": data.get("url"),
-                    "status_code": data.get("status_code"),
+                    "status_code": data.get("status-code"),
                     "title": data.get("title", "No Title"),
-                    "tech": data.get("tech", [])
+                    "tech": data.get("technologies", [])
                 })
                 
         return {
@@ -183,3 +193,52 @@ async def run_recon_pipeline(target: str):
         
     except json.JSONDecodeError:
         return {"error": "Could not read httpx data."}
+    import os
+import json
+import asyncio
+
+async def run_ffuf_scan(target: str):
+    # Ensure the target has a protocol
+    url = f"https://{target}/FUZZ" if not target.startswith("http") else f"{target}/FUZZ"
+    
+    # Create a safe temporary filename
+    safe_name = target.replace("://", "_").replace("/", "_")
+    output_file = f"ffuf_{safe_name}.json"
+
+    command = [
+        "ffuf",
+        "-w", "wordlist.txt",
+        "-u", url,
+        "-t", "50",                # 50 threads for high speed
+        "-mc", "200,301,302,403",  # Only catch valid or forbidden pages
+        "-of", "json",             # Output format as JSON
+        "-o", output_file,         # Save to our temp file
+        "-s"                       # Silent mode (don't clutter the server console)
+    ]
+
+    process = await asyncio.create_subprocess_exec(
+        *command,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE
+    )
+    await process.communicate()
+
+    # Read the JSON file FFUF created
+    results = []
+    if os.path.exists(output_file):
+        try:
+            with open(output_file, 'r') as f:
+                data = json.load(f)
+                for result in data.get("results", []):
+                    results.append({
+                        "url": result.get("url"),
+                        "status": result.get("status"),
+                        "words": result.get("words")
+                    })
+        except Exception as e:
+            return {"error": f"Failed to parse FFUF data: {str(e)}"}
+        finally:
+            # Always delete the temporary file to keep the server clean
+            os.remove(output_file)
+
+    return {"target": target, "directories_found": len(results), "directories": results}

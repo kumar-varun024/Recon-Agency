@@ -25,3 +25,5 @@ echo "    uvicorn main:app --reload"
 echo ""
 echo "In a second terminal, run the test client:"
 echo "    ./test_api.py"
+echo "[+] Downloading FFUF wordlist..."
+wget -q https://raw.githubusercontent.com/danielmiessler/SecLists/master/Discovery/Web-Content/common.txt -O wordlist.txt

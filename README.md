@@ -28,6 +28,12 @@ This framework requires the following tools to be present in the system's PATH:
 git clone https://github.com/kumar-varun024/recon-api.git
 cd recon-api
 ```
+### Install Python dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
 
 ### 2. Install Dependencies
 
@@ -83,6 +89,12 @@ agency-scan ports example.com
 agency-scan nuke hackerone.com
 ```
 
+**Show Help:**
+
+```bash
+agency-scan --help
+```
+
 ## API Endpoints
 
 The API utilizes GET requests for simplified browser and client testing.
@@ -104,6 +116,8 @@ recon-api/
 ├── launch-scan.sh          # Scan client launcher
 ├── test_api.py             # Client execution logic
 ├── requirements.txt        # Python dependencies
+├── wordlist.txt            # Wordlist for FFUF fuzzing (SecLists common.txt)
+├── resolvers-trusted.txt   # Trusted DNS resolvers for Subfinder
 └── README.md               # This file
 ```
 
@@ -120,11 +134,27 @@ The API will automatically detect and apply these credentials during scans.
 
 ### Trusted Resolvers
 
-To mitigate rate-limiting and improve DNS accuracy, place a trusted resolver list in the root directory.
+To mitigate rate-limiting and improve DNS accuracy, the trusted resolver list is already included in the repository:
+
+```
+resolvers-trusted.txt
+```
+
+If you need to update it, download the latest version:
 
 ```bash
 wget https://raw.githubusercontent.com/trickest/resolvers/main/resolvers-trusted.txt
 ```
+
+### Wordlist for FFUF
+
+The repository includes a pre-configured wordlist for FFUF directory fuzzing:
+
+```
+wordlist.txt
+```
+
+This wordlist is sourced from [SecLists](https://github.com/danielmiessler/SecLists) (common.txt). To use a custom wordlist, replace `wordlist.txt` or specify a different path in your FFUF requests.
 
 ## Contributing
 
