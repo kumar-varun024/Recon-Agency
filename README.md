@@ -86,7 +86,7 @@ agency-scan ports example.com
 **Full Reconnaissance Pipeline (All Tools):**
 
 ```bash
-agency-scan nuke hackerone.com
+agency-scan nuke example.com
 ```
 
 **Show Help:**
